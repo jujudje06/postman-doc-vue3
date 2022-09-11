@@ -13,9 +13,6 @@
 <script>
 export default {
   name: 'requestHeader',
-  props: ['header'],
-  data () {
-    return {}
-  }
+  props: ['header']
 }
 </script>

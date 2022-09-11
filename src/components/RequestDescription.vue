@@ -10,9 +10,6 @@
 <script>
 export default {
   name: 'requestDescription',
-  props: ['description'],
-  data () {
-    return {}
-  }
+  props: ['description']
 }
 </script>

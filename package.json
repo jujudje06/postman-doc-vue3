@@ -1,11 +1,10 @@
 {
   "name": "afterman",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "Convert postman collection in Markdown or HTML file",
   "productName": "Quasar App",
-  "cordovaId": "org.cordova.quasar.app",
-  "capacitorId": "",
   "author": "Albert E. Hidalgo Taveras <itsalb3rt@gmail.com>",
+  "contributors": ["Julien B."],
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ./",
@@ -14,25 +13,34 @@
     "build": "quasar build"
   },
   "dependencies": {
-    "@quasar/extras": "^1.14.0",
-    "quasar": "^1.18.10",
+    "@quasar/extras": "^1.15.3",
+    "core-js": "^3.0.0",
+    "quasar": "2.7.7",
     "turndown": "^6.0.0",
     "uniqid": "^5.4.0",
-    "vue-i18n": "^8.27.1"
+    "vue": "3.2.39",
+    "vue-i18n": "^9.3.0-beta.3",
+    "vue-json-viewer": "3",
+    "vue-router": "4.1.5",
+    "vuex": "4.0.2"
   },
   "devDependencies": {
-    "@quasar/app": "^1.9.6",
-    "@quasar/quasar-app-extension-qmarkdown": "^1.4.4",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-loader": "^3.0.3",
-    "eslint-plugin-import": "^2.26.0",
+    "@babel/core": "7.11.0",
+    "@babel/eslint-parser": "^7.0.0",
+    "@quasar/app": "3.3.3",
+    "@quasar/quasar-app-extension-qmarkdown": "^2.0.0-beta.7",
+    "babel-loader": "^8.2.5",
+    "eslint": "^7.14.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-promise": "^4.3.1",
-    "eslint-plugin-standard": "^4.1.0",
-    "eslint-plugin-vue": "^6.1.2",
-    "uglifyjs-webpack-plugin": "^2.2.0"
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-quasar": "^1.0.0",
+    "eslint-plugin-vue": "^7.0.0",
+    "eslint-webpack-plugin": "^3.2.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "5.0.0"
   },
   "engines": {
     "node": ">= 10.18.1",
@@ -40,9 +48,14 @@
     "yarn": ">= 1.21.1"
   },
   "browserslist": [
-    "last 1 version, not dead, ie >= 11"
-  ],
-  "resolutions": {
-    "@babel/parser": "7.7.5"
-  }
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions"
+  ]
 }

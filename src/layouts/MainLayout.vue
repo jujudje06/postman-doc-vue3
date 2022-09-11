@@ -7,7 +7,7 @@
           <q-img src="~assets/mars.png" alt="mars-planet" />
         </q-avatar>
         <q-toolbar-title>
-          Afterman
+          API Doc Generator
         </q-toolbar-title>
 
         <div>v{{ appVersion }}</div>

@@ -17,7 +17,7 @@
           <q-card-section class="q-mb-md">
             <q-file
               standout
-              @input="parseJsonFile()"
+              @update:model-value="parseJsonFile()"
               v-model="uploadedFile"
               label="Import JSON"
               accept=".json"
@@ -65,13 +65,11 @@
             v-if="$store.getters['collection/getIsTableContentReady']"
           >
             <div
-              v-for="(item, index) in this.$store.getters[
-                'collection/getCollection'
-              ].item"
+              v-for="(item, index) in this.$store.getters['collection/getCollection'].item"
               :key="index"
             >
               <q-separator v-if="index > 0" />
-              <h2 class="text-h4 q-mt-md q-mb-xs" :id="item.id">{{ item.name }}</h2>
+              <h2 class="vertical-middle text-h4 q-mt-md q-mb-xs" :id="item.id">📁 {{ item.name }}</h2>
               <request-description v-if="item.description" :description="item.description"/>
               <div class="request">
                 <div
@@ -112,7 +110,7 @@
     </div>
     <display-settings />
     <q-page-sticky
-      v-if="scrollInfo.position >= 200"
+      v-if="scrollInfo.position && scrollInfo.position.top >= 200"
       position="bottom-right"
       :offset="[18, 80]"
     >
@@ -269,7 +267,7 @@ export default {
       const content = this.constructHtmlStrucuteForDownload('', '', tableOfContent, collectionContent)
       const fileName = 'README.md'
 
-      var markdown = turndownService.turndown(content)
+      const markdown = turndownService.turndown(content)
       this.downloadFile(fileName, markdown)
     },
     getMethodColor (method) {

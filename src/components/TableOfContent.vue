@@ -6,7 +6,10 @@
         <q-item v-for="(item, index) in tableOfContent" :key="index">
           <q-item-section class="text-capitalize" style="display:inline-block">
             <span class="root-list-item">
-              <span class="table-content-icon text-grey-7" :data-content-id="'content'+item.id" onclick="toggleContent(this.getAttribute('data-content-id'), this);">►</span> 📁
+              <span
+                class="table-content-icon text-grey-7" :data-content-id="'content'+item.id"
+                onclick="toggleContent(this.getAttribute('data-content-id'), this);"
+              >►</span> 📁
               <span class="text-bold">
                 <a
                   class="item text-capitalize"
