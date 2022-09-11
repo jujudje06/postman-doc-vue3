@@ -6,13 +6,21 @@ Export beautiful docs in **Markdown** and **HTML** from postman collection
 - :wrench: No configuration
 - :fire: Customize the output of your documentation *(Include Dark mode)*
 - :tada: Only HTML, CSS and Javascript (**Quasar Framework power**)
-    => Quasar V2.7.7 | QuasarApp 3.3.3 | Vue3 | Vuex4 | Vue-Router4
+
+### Frameworks
+- Quasar @2.7.7
+- QuasarApp@ 3.3.3
+- Vue @3
+- Vuex @4
+- Vue-Router @4
 
 > Note: The tool covers the basic options of a collection, variables, description, headers, body, routes, as needs arise more things will be added.
 
 ### Main view
 
 ![Main view](https://i.ibb.co/Qcj7Ssg/main.png)
+
+![Main view](https://i.ibb.co/gZ8JwFr/capture.png)
 
 ## Table of content
 
