@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-h6">Body</p>
+    <slot></slot>
     <json-viewer v-if="body"
       :preview-mode="true"
       :value="parsedBody"
@@ -15,7 +15,9 @@ import { defineProps, computed } from 'vue'
 const props = defineProps(['body'])
 
 const parsedBody = computed(() => {
-  return (props.body.raw || props.body[props.body.mode] || '')
+  const body = (props.body.raw || props.body[props.body.mode] || props.body)
+  console.log(body)
+  return JSON.stringify(body).replace(/"{/g, '{')
 })
 </script>
 

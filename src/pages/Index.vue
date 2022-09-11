@@ -17,7 +17,7 @@
           <q-card-section class="q-mb-md">
             <q-file
               standout
-              @update:model-value="parseJsonFile()"
+              @update:model-value="parseJsonFile"
               v-model="uploadedFile"
               label="Import JSON"
               accept=".json"
@@ -35,7 +35,7 @@
                   color="primary"
                   label="Download in HTML"
                   icon="code"
-                  @click="downloadHtml()"
+                  @click="downloadHtml"
                 />
               </div>
               <div>
@@ -43,7 +43,7 @@
                   color="primary"
                   label="Download in Markdown"
                   icon="description"
-                  @click="downloadMarkdown()"
+                  @click="downloadMarkdown"
                 />
               </div>
             </div>
@@ -68,9 +68,7 @@
             v-if="$store.getters['collection/getIsTableContentReady']"
           >
             <div
-              v-for="(item, index) in $store.getters[
-                'collection/getCollection'
-              ].item"
+              v-for="(item, index) in $store.getters['collection/getCollection'].item"
               :key="index"
             >
               <q-separator v-if="index > 0" />
@@ -123,15 +121,19 @@
                     />
                   </div>
                   <q-separator class="q-mt-md q-mb-md" />
-                  <div
-                    class="description q-my-md"
-                    v-if="
-                      $store.getters['displaySettings/getDisplayRequestBody']
-                    "
-                  >
-                    <request-body :body="request.request.body" />
-                  </div>
+                    <div class="description q-my-md"
+                        v-if="$store.getters['displaySettings/getDisplayRequestBody']"
+                    >
+                      <request-body :body="request.request.body">
+                        <p class="text-h6">Body</p>
+                      </request-body>
+                    </div>
                   <q-separator />
+                  <div class="q-mt-md q-mb-md" v-if="request.response. length > 0">
+                    <p class="text-h5">Responses samples</p>
+                    <response-sample v-for="(sample, index) in request.response" :key="index" :response="sample" />
+                  </div>
+                  <q-separator color="primary" class="q-mt-md q-mb-md" />
                 </div>
               </div>
               <q-separator color="secondary" class="q-mt-md q-mb-md" />
@@ -161,6 +163,7 @@ import requestDescription from 'src/components/RequestDescription'
 import requestUrl from 'src/components/RequestUrl'
 import displaySettings from 'src/components/DisplaySettings'
 import tableOfContent from 'src/components/TableOfContent'
+import responseSample from 'src/components/ResponseSample'
 
 // Import scripts/composables
 import useTableOfContentUtil from 'src/composables/useTableOfContentUtil.js'
