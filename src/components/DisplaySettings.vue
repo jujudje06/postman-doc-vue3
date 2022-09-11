@@ -14,14 +14,14 @@
           <p class="text-bold">General</p>
           <div>
             <q-toggle
-              @input="toggleDisableLineNumbers()"
+              @input="toggleDisableLineNumbers"
               v-model="toggleLineNumbers"
               label="Disable line numbers"
             ></q-toggle>
           </div>
           <div>
             <q-toggle
-              @input="darkMode()"
+              @update:model-value="darkMode"
               v-model="toggleDarkMode"
               label="Dark Mode"
             ></q-toggle>
@@ -36,28 +36,28 @@
           </div>
           <div>
             <q-toggle
-              @input="toggleDisplayRequestHeaders()"
+              @update:model-value="toggleDisplayRequestHeaders"
               v-model="displayRequestHeaders"
               label="Display Headers"
             ></q-toggle>
           </div>
           <div>
             <q-toggle
-              @input="toggleDisplayRequestUrl()"
+              @update:model-value="toggleDisplayRequestUrl"
               v-model="displayRequestUrl"
               label="Display URL"
             ></q-toggle>
           </div>
           <div>
             <q-toggle
-              @input="toggleDisplayRequestDescription()"
+              @update:model-value="toggleDisplayRequestDescription"
               v-model="displayRequestDescription"
               label="Display Description"
             ></q-toggle>
           </div>
           <div>
             <q-toggle
-              @input="toggleDisplayRequestBody()"
+              @update:model-value="toggleDisplayRequestBody"
               v-model="displayRequestBody"
               label="Display Body"
             ></q-toggle>
@@ -137,35 +137,35 @@ export default {
     toggleDisableLineNumbers () {
       this.$store.commit(
         'displaySettings/SET_DISABLE_LINE_NUMBER',
-        this.toggleLineNumbers
+        !this.toggleLineNumbers
       )
     },
     toggleDisplayRequestHeaders () {
       this.$store.commit(
         'displaySettings/SET_DISPLAY_REQUEST_HEADERS',
-        this.displayRequestHeaders
+        !this.displayRequestHeaders
       )
     },
     toggleDisplayRequestUrl () {
       this.$store.commit(
         'displaySettings/SET_DISPLAY_REQUEST_URL',
-        this.displayRequestUrl
+        !this.displayRequestUrl
       )
     },
     toggleDisplayRequestDescription () {
       this.$store.commit(
         'displaySettings/SET_DISPLAY_REQUEST_DESCRIPTION',
-        this.displayRequestDescription
+        !this.displayRequestDescription
       )
     },
     toggleDisplayRequestBody () {
       this.$store.commit(
         'displaySettings/SET_DISPLAY_REQUEST_BODY',
-        this.displayRequestBody
+        !this.displayRequestBody
       )
     },
     darkMode () {
-      this.$q.dark.set(this.toggleDarkMode)
+      this.$q.dark.set(!this.toggleDarkMode)
     }
   }
 }

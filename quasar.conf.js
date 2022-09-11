@@ -39,7 +39,7 @@ module.exports = function (ctx) {
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
       iconSet: 'material-icons', // Quasar icon set
-      lang: 'en-us', // Quasar language pack
+      lang: 'en-US', // Quasar language pack
 
       // Possible values for "all":
       // * 'auto' - Auto-import needed Quasar components & directives
@@ -48,7 +48,7 @@ module.exports = function (ctx) {
       //            (fastest compile time; minimum bundle size; most tedious)
       // * true   - Import everything from Quasar
       //            (not treeshaking Quasar; biggest bundle size; convenient)
-      all: 'auto',
+      importStrategy: 'auto',
 
       components: [
         'QCard',
@@ -61,9 +61,6 @@ module.exports = function (ctx) {
       plugins: ['Loading', 'Notify']
     },
 
-    // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
-    supportIE: false,
-
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ts
     supportTS: false,
 
@@ -72,10 +69,10 @@ module.exports = function (ctx) {
       vueRouterMode: 'history', // available values: 'hash', 'history'
       env: ctx.dev
         ? {
-          APP_VERSION: JSON.stringify('0.8.1')
+          APP_VERSION: '1.0.0'
         }
         : {
-          APP_VERSION: JSON.stringify('0.8.1')
+          APP_VERSION: '0.8.1'
         },
       // rtl: false, // https://quasar.dev/options/rtl-support
       // showProgress: false,
@@ -92,10 +89,7 @@ module.exports = function (ctx) {
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /node_modules/,
-          options: {
-            formatter: require('eslint').CLIEngine.getFormatter('stylish')
-          }
+          exclude: /(node_modules|quasar)/
         })
       }
     },
@@ -130,27 +124,27 @@ module.exports = function (ctx) {
         theme_color: '#027be3',
         icons: [
           {
-            src: 'statics/icons/icon-128x128.png',
+            src: 'icons/icon-128x128.png',
             sizes: '128x128',
             type: 'image/png'
           },
           {
-            src: 'statics/icons/icon-192x192.png',
+            src: 'icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'statics/icons/icon-256x256.png',
+            src: 'icons/icon-256x256.png',
             sizes: '256x256',
             type: 'image/png'
           },
           {
-            src: 'statics/icons/icon-384x384.png',
+            src: 'icons/icon-384x384.png',
             sizes: '384x384',
             type: 'image/png'
           },
           {
-            src: 'statics/icons/icon-512x512.png',
+            src: 'icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png'
           }

@@ -3,7 +3,7 @@
     <q-chip class="request-method" :color="getColorByMethod(method)" text-color="white">
       {{ method }}
     </q-chip>
-    <strong class="text-bold request-name" :id.sync="anchor">{{requestName}}</strong>
+    <strong class="vertical-middle text-h6 q-my-sx text-bold request-name" :id="anchor">{{requestName}}</strong>
   </div>
 </template>
 
