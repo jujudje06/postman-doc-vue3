@@ -26,23 +26,26 @@
                 <q-icon name="cloud_upload" />
               </template>
             </q-file>
-            <div class="q-mt-md" v-if="$store.getters['collection/getIsTableContentReady']">
-            <div class="q-my-md">
-              <q-btn
-              color="primary"
-              label="Download in HTML"
-              icon="code"
-              @click="downloadHtml()"
-            />
-            </div>
-            <div>
-              <q-btn
-              color="primary"
-              label="Download in Markdown"
-              icon="description"
-              @click="downloadMarkdown()"
-            />
-            </div>
+            <div
+              class="q-mt-md"
+              v-if="$store.getters['collection/getIsTableContentReady']"
+            >
+              <div class="q-my-md">
+                <q-btn
+                  color="primary"
+                  label="Download in HTML"
+                  icon="code"
+                  @click="downloadHtml()"
+                />
+              </div>
+              <div>
+                <q-btn
+                  color="primary"
+                  label="Download in Markdown"
+                  icon="description"
+                  @click="downloadMarkdown()"
+                />
+              </div>
             </div>
           </q-card-section>
         </q-card>
@@ -56,8 +59,8 @@
         <q-card v-if="isJsonLoaded" class="collection-content">
           <q-card-section>
             <collection-description
-              :info="this.$store.getters['collection/getCollection'].info"
-              v-if="this.$store.getters['collection/getCollection'].info"
+              :info="$store.getters['collection/getCollection'].info"
+              v-if="$store.getters['collection/getCollection'].info"
             />
           </q-card-section>
           <q-separator />
@@ -65,12 +68,19 @@
             v-if="$store.getters['collection/getIsTableContentReady']"
           >
             <div
-              v-for="(item, index) in this.$store.getters['collection/getCollection'].item"
+              v-for="(item, index) in $store.getters[
+                'collection/getCollection'
+              ].item"
               :key="index"
             >
               <q-separator v-if="index > 0" />
-              <h2 class="vertical-middle text-h4 q-mt-md q-mb-xs" :id="item.id">📁 {{ item.name }}</h2>
-              <request-description v-if="item.description" :description="item.description"/>
+              <h2 class="vertical-middle text-h4 q-mt-md q-mb-xs" :id="item.id">
+                📁 {{ item.name }}
+              </h2>
+              <request-description
+                v-if="item.description"
+                :description="item.description"
+              />
               <div class="request">
                 <div
                   class="request"
@@ -84,19 +94,41 @@
                       :anchor="request.id"
                     />
                   </div>
-                  <div class="header q-my-md" v-if="$store.getters['displaySettings/getDisplayRequestHeaders']">
+                  <div
+                    class="header q-my-md"
+                    v-if="
+                      $store.getters['displaySettings/getDisplayRequestHeaders']
+                    "
+                  >
                     <request-header :header="request.request.header" />
                   </div>
-                  <div class="url q-my-md" v-if="$store.getters['displaySettings/getDisplayRequestUrl']">
+                  <div
+                    class="url q-my-md"
+                    v-if="
+                      $store.getters['displaySettings/getDisplayRequestUrl']
+                    "
+                  >
                     <request-url :url="request.request.url.raw" />
                   </div>
-                  <div class="description q-my-md" v-if="$store.getters['displaySettings/getDisplayRequestDescription']">
+                  <div
+                    class="description q-my-md"
+                    v-if="
+                      $store.getters[
+                        'displaySettings/getDisplayRequestDescription'
+                      ]
+                    "
+                  >
                     <request-description
                       :description="request.request.description"
                     />
                   </div>
                   <q-separator class="q-mt-md q-mb-md" />
-                  <div class="description q-my-md" v-if="$store.getters['displaySettings/getDisplayRequestBody']">
+                  <div
+                    class="description q-my-md"
+                    v-if="
+                      $store.getters['displaySettings/getDisplayRequestBody']
+                    "
+                  >
                     <request-body :body="request.request.body" />
                   </div>
                   <q-separator />
@@ -119,7 +151,8 @@
   </q-page>
 </template>
 
-<script>
+<script setup>
+// Import components used
 import collectionDescription from 'src/components/CollectionDescription'
 import requestMethod from 'src/components/RequestMethod'
 import requestHeader from 'src/components/RequestHeader'
@@ -128,242 +161,152 @@ import requestDescription from 'src/components/RequestDescription'
 import requestUrl from 'src/components/RequestUrl'
 import displaySettings from 'src/components/DisplaySettings'
 import tableOfContent from 'src/components/TableOfContent'
-import TurndownService from 'turndown'
-import { inmutableToggleContent } from 'src/assets/js/tableOfContentUtil.js'
 
-export default {
-  name: 'PageIndex',
-  components: {
-    requestMethod,
-    requestHeader,
-    requestBody,
-    requestDescription,
-    displaySettings,
-    collectionDescription,
-    requestUrl,
-    tableOfContent
-  },
-  data () {
-    return {
-      uploadedFile: null,
-      fileAsJson: {
-        item: null
-      },
-      scrollInfo: {},
-      methodsColors: [
-        { method: 'POST', value: '#1976D2' },
-        { method: 'GET', value: '#21BA45' },
-        { method: 'PATCH', value: '#9e9e9e' },
-        { method: 'PUT', value: '#9e9e9e' },
-        { method: 'DELETE', value: '#C10015' }
-      ]
+// Import scripts/composables
+import useTableOfContentUtil from 'src/composables/useTableOfContentUtil.js'
+import useTurndownService from 'src/composables/useTurndownService'
+import { computed, ref } from '@vue/runtime-core'
+import { useStore } from 'vuex'
+import { useQuasar } from 'quasar'
+
+// Composables uses
+const $store = useStore()
+const $q = useQuasar()
+const { inmutableToggleContent } = useTableOfContentUtil()
+const turndownService = useTurndownService()
+
+// data to expose
+const uploadedFile = ref(null)
+const scrollInfo = ref({})
+
+// Computed properties
+const isJsonLoaded = computed(() => $store.getters['collection/getCollection'].item.length !== 0)
+
+// Methods declarations
+const parseJsonFile = () => {
+  $q.loading.show()
+  $store.commit('collection/SET_COLLECTION', $store.getters['collection/getCollectionModel'])
+  setTimeout(() => {
+    const fr = new FileReader()
+    fr.onload = e => {
+      const result = JSON.parse(e.target.result)
+      $store.commit('collection/SET_COLLECTION', result)
+      validatedCollection()
+      $q.loading.hide()
     }
-  },
-  computed: {
-    isJsonLoaded () {
-      return this.$store.getters['collection/getCollection'].item.length !== 0
-    }
-  },
-  methods: {
-    parseJsonFile () {
-      this.$q.loading.show()
-      this.$store.commit('collection/SET_COLLECTION', this.$store.getters['collection/getCollectionModel'])
-      setTimeout(() => {
-        const fr = new FileReader()
-        fr.onload = e => {
-          const result = JSON.parse(e.target.result)
-          this.$store.commit('collection/SET_COLLECTION', result)
-          this.validatedCollection()
-          this.$q.loading.hide()
-        }
 
-        fr.readAsText(this.uploadedFile)
-      }, 500)
-    },
-    validatedCollection () {
-      if (!this.$store.getters['collection/isValid']) {
-        this.$q.notify({ message: 'Invalid Collection', position: 'top', color: 'negative' })
-        this.$store.commit('collection/SET_COLLECTION', this.$store.getters['collection/getCollectionModel'])
-      }
-    },
-    onScroll (info) {
-      this.scrollInfo = info
-    },
-    downloadMarkdown () {
-      const turndownService = new TurndownService()
+    fr.readAsText(uploadedFile.value)
+  }, 500)
+}
 
-      /**
-      * format a table of content list
-      */
-      turndownService.addRule('rootList', {
-        filter: (node, options) => node.classList.contains('root-list-item'),
+const validatedCollection = () => {
+  if (!$store.getters['collection/isValid']) {
+    $q.notify({ message: 'Invalid Collection', position: 'top', color: 'negative' })
+    $store.commit('collection/SET_COLLECTION', $store.getters['collection/getCollectionModel'])
+  }
+}
 
-        replacement: (content, node, options) => `- <details><summary>${content.replace(/\n/g, '')} </summary>`.replace('►', '')
-      })
-      /**
-      * format a table of content list
-      */
-      turndownService.addRule('childList', {
-        filter: (node, options) => node.classList.contains('child-list-item'),
+const onScroll = (info) => {
+  scrollInfo.value = info
+}
 
-        replacement: (content, node, options) => `\t - ${content.replace(/\n/g, '')} <br/> \n\n`.replace('[', ' [')
-      })
+const downloadMarkdown = () => {
+  const { tableOfContent, collectionContent } = getContentCollection()
+  const content = constructHtmlStrucuteForDownload('', '', tableOfContent, collectionContent)
+  const fileName = 'README.md'
+  const markdown = turndownService.turndown(content)
+  downloadFile(fileName, markdown)
+}
 
-      /**
-      * Convert the method chips to in line element and
-      * added a bold text
-      */
-      turndownService.addRule('chipsMethods', {
-        filter: (node, options) => node.classList.contains('request-method'),
+const downloadHtml = () => {
+  const { tableOfContent, collectionContent, css } = getContentCollection()
+  const fileName = `${$store.getters['collection/getCollection'].info.name}.html`
+  const javascript = inmutableToggleContent
+  const content = constructHtmlStrucuteForDownload(css, javascript, tableOfContent, collectionContent)
 
-        replacement: (content, node, options) =>
-            `<strong style="color:${this.getMethodColor(content)}">` + content.replace(/\n/g, '') + '</strong> - '
-      })
+  downloadFile(fileName, content)
+}
 
-      /**
-      * Keep the html tag headers for use anchors
-      */
-      turndownService.addRule('keepHeadersTags', {
-        filter: (node, options) => {
-          return (
-            node.nodeName === 'H2'
-          )
-        },
+const getContentCollection = () => {
+  /**
+  * Return HTML as string
+  **/
+  const tableOfContent = document.querySelector('.table-of-content').outerHTML
+  const collectionContent = document.querySelector('.collection-content').outerHTML
+  const css = extractCss()
 
-        replacement: (content, node, options) => node.outerHTML
-      })
+  return { tableOfContent, collectionContent, css }
+}
 
-      /**
-      * Keep HTML tag for request methods for use anchors
-      */
-      turndownService.addRule('keepRequestMethodTags', {
+const downloadFile = (fileName, content) => {
+  /**
+  * Make a string downloable, the file extension come in with the fileName param
+  */
 
-        filter: (node, options) => {
-          return (
-            node.classList.contains('request-name')
-          )
-        },
+  // creating an invisible element
+  const element = document.createElement('a')
+  element.setAttribute(
+    'href',
+    'data:text/plain;charset=utf-8, ' + encodeURIComponent(content)
+  )
+  element.setAttribute('download', fileName)
+  // the above code is equivalent to
+  // <a href="path of file" download="file name">
 
-        replacement: (content, node, options) => node.outerHTML
-      })
+  document.body.appendChild(element)
+  element.click()
+  document.body.removeChild(element)
+}
 
-      /**
-      * Keep HTML tag for 'a href' for use content list
-      */
-      turndownService.addRule('keepRootListTags', {
+const constructHtmlStrucuteForDownload = (css, javascript, tableOfContent, collectionContent) => {
+  /**
+  * Create a logic HTML structure as string for make a downloable file
+  */
+  const bodyClasses = document.querySelector('body').classList
+  const html = `
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>${css}</style>
+    </head>
+    <body class="${bodyClasses.toString()}">
+      <main class="q-page q-pa-md q-page-container">
+        <div class="row">
+          <div class="col-sm-12 col-md-3 q-mr-xs q-mt-xs">
+            ${tableOfContent}
+          </div>
+          <div class="col-sm-12 col-md-8 q-mt-xs">
+            ${collectionContent}
+          </div>
+        </div>
+      </main>
+      <script>${javascript}\u003c/script>
+    </body>
+  </html>
+  `
+  return html
+}
 
-        filter: (node, options) => {
-          return (
-            node.nodeName === 'A' &&
-            node.classList.contains('item') &&
-            node.classList.contains('text-capitalize')
-          )
-        },
-
-        replacement: (content, node, options) => node.outerHTML
-      })
-
-      const { tableOfContent, collectionContent } = this.getContentCollection()
-      const content = this.constructHtmlStrucuteForDownload('', '', tableOfContent, collectionContent)
-      const fileName = 'README.md'
-
-      const markdown = turndownService.turndown(content)
-      this.downloadFile(fileName, markdown)
-    },
-    getMethodColor (method) {
-      method = method.replace(/\n/g, '').trim()
-      const result = this.methodsColors.find(color => color.method === method.toUpperCase())
-      return result ? result.value : '#9C27B0'
-    },
-    downloadHtml () {
-      const { tableOfContent, collectionContent, css } = this.getContentCollection()
-      const fileName = `${this.$store.getters['collection/getCollection'].info.name}.html`
-      const javascript = inmutableToggleContent
-      const content = this.constructHtmlStrucuteForDownload(css, javascript, tableOfContent, collectionContent)
-
-      this.downloadFile(fileName, content)
-    },
-    getContentCollection () {
-      /**
-      * Return HTML as string
-      **/
-      const tableOfContent = document.querySelector('.table-of-content')
-        .outerHTML
-      const collectionContent = document.querySelector('.collection-content')
-        .outerHTML
-      const css = this.extractCss()
-
-      return { tableOfContent, collectionContent, css }
-    },
-    downloadFile (fileName, content) {
-      /**
-      * Make a string downloable, the file extension come in with the fileName param
-      */
-
-      // creating an invisible element
-      const element = document.createElement('a')
-      element.setAttribute(
-        'href',
-        'data:text/plain;charset=utf-8, ' + encodeURIComponent(content)
+const extractCss = () => {
+  const css = []
+  for (let i = 0; i < document.styleSheets.length; i++) {
+    const sheet = document.styleSheets[i]
+    const rules = 'cssRules' in sheet ? sheet.cssRules : sheet.rules
+    if (rules) {
+      css.push(
+        '\n/* Stylesheet : ' + (sheet.href || '[inline styles]') + ' */'
       )
-      element.setAttribute('download', fileName)
-      // the above code is equivalent to
-      // <a href="path of file" download="file name">
-
-      document.body.appendChild(element)
-      element.click()
-      document.body.removeChild(element)
-    },
-    constructHtmlStrucuteForDownload (css, javascript, tableOfContent, collectionContent) {
-      /**
-      * Create a logic HTML structure as string for make a downloable file
-      */
-      const bodyClasses = document.querySelector('body').classList
-      const html = `
-      <html>
-        <head>
-          <meta charset="UTF-8">
-          <style>${css}</style>
-        </head>
-        <body class="${bodyClasses.toString()}">
-          <main class="q-page q-pa-md q-page-container">
-            <div class="row">
-              <div class="col-sm-12 col-md-3 q-mr-xs q-mt-xs">
-                ${tableOfContent}
-              </div>
-              <div class="col-sm-12 col-md-8 q-mt-xs">
-                ${collectionContent}
-              </div>
-            </div>
-          </main>
-          <script>${javascript}\u003c/script>
-        </body>
-      </html>
-      `
-      return html
-    },
-    extractCss () {
-      const css = []
-      for (let i = 0; i < document.styleSheets.length; i++) {
-        const sheet = document.styleSheets[i]
-        const rules = 'cssRules' in sheet ? sheet.cssRules : sheet.rules
-        if (rules) {
+      for (let j = 0; j < rules.length; j++) {
+        const rule = rules[j]
+        if ('cssText' in rule) css.push(rule.cssText)
+        else {
           css.push(
-            '\n/* Stylesheet : ' + (sheet.href || '[inline styles]') + ' */'
+            rule.selectorText + ' {\n' + rule.style.cssText + '\n}\n'
           )
-          for (let j = 0; j < rules.length; j++) {
-            const rule = rules[j]
-            if ('cssText' in rule) css.push(rule.cssText)
-            else {
-              css.push(
-                rule.selectorText + ' {\n' + rule.style.cssText + '\n}\n'
-              )
-            }
-          }
         }
       }
-      return css.join('\n') + '\n'
     }
   }
+  return css.join('\n') + '\n'
 }
 </script>

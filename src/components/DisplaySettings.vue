@@ -97,76 +97,44 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'displaySettings',
-  mounted () {
-    this.toggleLineNumbers = this.$store.getters[
-      'displaySettings/getDisableLineNumbers'
-    ]
-    this.displayRequestHeaders = this.$store.getters[
-      'displaySettings/getDisplayRequestHeaders'
-    ]
-    this.displayRequestUrl = this.$store.getters[
-      'displaySettings/getDisplayRequestUrl'
-    ]
-    this.displayRequestDescription = this.$store.getters[
-      'displaySettings/getDisplayRequestDescription'
-    ]
-    this.displayRequestBody = this.$store.getters[
-      'displaySettings/getDisplayRequestBody'
-    ]
-    this.toggleDarkMode = this.$q.dark.isActive
-  },
-  data () {
-    return {
-      showDialog: false,
-      toggleLineNumbers: false,
-      displayRaw: false,
-      toggleDarkMode: false,
-      displayRequestHeaders: true,
-      displayRequestDescription: true,
-      displayRequestBody: true,
-      displayRequestUrl: true
-    }
-  },
-  methods: {
-    toggleDialog () {
-      this.showDialog = !this.showDialog
-    },
-    toggleDisableLineNumbers () {
-      this.$store.commit(
-        'displaySettings/SET_DISABLE_LINE_NUMBER',
-        !this.toggleLineNumbers
-      )
-    },
-    toggleDisplayRequestHeaders () {
-      this.$store.commit(
-        'displaySettings/SET_DISPLAY_REQUEST_HEADERS',
-        !this.displayRequestHeaders
-      )
-    },
-    toggleDisplayRequestUrl () {
-      this.$store.commit(
-        'displaySettings/SET_DISPLAY_REQUEST_URL',
-        !this.displayRequestUrl
-      )
-    },
-    toggleDisplayRequestDescription () {
-      this.$store.commit(
-        'displaySettings/SET_DISPLAY_REQUEST_DESCRIPTION',
-        !this.displayRequestDescription
-      )
-    },
-    toggleDisplayRequestBody () {
-      this.$store.commit(
-        'displaySettings/SET_DISPLAY_REQUEST_BODY',
-        !this.displayRequestBody
-      )
-    },
-    darkMode () {
-      this.$q.dark.set(!this.toggleDarkMode)
-    }
-  }
+<script setup>
+import { computed } from '@vue/reactivity'
+import { useQuasar } from 'quasar'
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+
+const $store = useStore()
+const $q = useQuasar()
+
+const showDialog = ref(false)
+const displayRaw = ref(false)
+const toggleDarkMode = ref(false)
+
+const toggleLineNumbers = computed(() => $store.getters['displaySettings/getDisableLineNumbers'] || true)
+const displayRequestHeaders = computed(() => $store.getters['displaySettings/getDisplayRequestHeaders'] || true)
+const displayRequestDescription = computed(() => $store.getters['displaySettings/getDisplayRequestDescription'] || true)
+const displayRequestBody = computed(() => $store.getters['displaySettings/getDisplayRequestBody'] || true)
+const displayRequestUrl = computed(() => $store.getters['displaySettings/getDisplayRequestUrl'] || true)
+
+const toggleDialog = () => {
+  showDialog.value = !showDialog.value
+}
+const toggleDisableLineNumbers = () => {
+  $store.commit('displaySettings/SET_DISABLE_LINE_NUMBER', !toggleLineNumbers)
+}
+const toggleDisplayRequestHeaders = () => {
+  $store.commit('displaySettings/SET_DISPLAY_REQUEST_HEADERS', !displayRequestHeaders)
+}
+const toggleDisplayRequestUrl = () => {
+  $store.commit('displaySettings/SET_DISPLAY_REQUEST_URL', !displayRequestUrl)
+}
+const toggleDisplayRequestDescription = () => {
+  $store.commit('displaySettings/SET_DISPLAY_REQUEST_DESCRIPTION', !displayRequestDescription)
+}
+const toggleDisplayRequestBody = () => {
+  $store.commit('displaySettings/SET_DISPLAY_REQUEST_BODY', !displayRequestBody)
+}
+const darkMode = () => {
+  $q.dark.set(!toggleDarkMode.value)
 }
 </script>

@@ -46,80 +46,75 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import uniqid from 'uniqid'
-import { toggleContent } from 'src/assets/js/tableOfContentUtil.js'
+import useTableOfContentUtil from 'src/composables/useTableOfContentUtil.js'
+import { computed, onMounted } from '@vue/runtime-core'
+import { useStore } from 'vuex'
 
-export default {
-  name: 'tableOfContent',
-  mounted () {
-    /**
-     * added function in window, no is a good practice but is for
-     *  reusable code for final version of documentation.
-     */
-    window.toggleContent = toggleContent
-  },
-  data () {
-    return {
-      colors: [
-        { method: 'POST', value: 'primary' },
-        { method: 'GET', value: 'positive' },
-        { method: 'PATCH', value: 'grey' },
-        { method: 'DELETE', value: 'negative' },
-        { method: 'PUT', value: 'indigo' }
-      ]
-    }
-  },
-  methods: {
-    getColorByMethod (method) {
-      const result = this.colors.find(
-        color => color.method === method.toUpperCase()
-      )
-      return result.value
-    },
-    setTableContentReady () {
-      /**
-       * Hack for active the main content view, this wait for the coneten loading
-       * and used the new properties
-       */
-      this.$store.commit('collection/SET_TABLE_CONTENT_READY', true)
-    }
-  },
-  computed: {
-    tableOfContent () {
-      const result = []
-      this.$store.getters['collection/getCollection'].item.forEach(
-        (element, index) => {
-          // Create a unique Id for use the anchors
-          element.id = uniqid()
+const TOCUtil = useTableOfContentUtil()
+const $store = useStore()
 
-          const currentKey = element.name.toString().toLowerCase()
-          result[index] = {
-            id: element.id,
-            label: currentKey,
-            children: [],
-            anchor: currentKey + 'anchor',
-            icon: 'folder'
-          }
+const colors = [
+  { method: 'POST', value: 'primary' },
+  { method: 'GET', value: 'positive' },
+  { method: 'PATCH', value: 'grey' },
+  { method: 'DELETE', value: 'negative' },
+  { method: 'PUT', value: 'indigo' }
+]
 
-          element.item.forEach(request => {
-            // Create a unique Id for use the anchors in content table
-            request.id = uniqid()
+onMounted(() => {
+  window.toggleContent = TOCUtil.toggleContent
+})
 
-            result[index].children.push({
-              id: request.id,
-              originalKey: request.name.replace(/[^a-z0-9A-Z]/g, ''),
-              label: request.name,
-              method: request.request.method
-            })
-          })
-        }
-      )
-      return result
-    }
-  }
+const getColorByMethod = (method) => {
+  const result = colors.find(
+    color => color.method === method.toUpperCase()
+  )
+  return result.value
 }
+
+const setTableContentReady = () => {
+  /**
+   * Hack for active the main content view, this wait for the content loading
+   * and used the new properties
+   */
+  $store.commit('collection/SET_TABLE_CONTENT_READY', true)
+}
+
+const tableOfContent = computed(() => {
+  const result = []
+  $store.getters['collection/getCollection'].item.forEach(
+    (element, index) => {
+      // Create a unique Id for use the anchors
+      element.id = uniqid()
+
+      const currentKey = element.name.toString().toLowerCase()
+      result[index] = {
+        id: element.id,
+        label: currentKey,
+        children: [],
+        anchor: currentKey + 'anchor',
+        icon: 'folder'
+      }
+
+      element.item.forEach(request => {
+        // Create a unique Id for use the anchors in content table
+        request.id = uniqid()
+
+        result[index].children.push({
+          id: request.id,
+          originalKey: request.name.replace(/[^a-z0-9A-Z]/g, ''),
+          label: request.name,
+          method: request.request.method
+        })
+      })
+    }
+  )
+  return result
+})
 </script>
+
 <style lang="scss">
 .tree a.item {
   text-decoration: none;

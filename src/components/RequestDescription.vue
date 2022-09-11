@@ -7,9 +7,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'requestDescription',
-  props: ['description']
-}
+<script setup>
+import { defineProps } from 'vue'
+
+defineProps(['description'])
 </script>

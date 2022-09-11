@@ -2,28 +2,21 @@
   <div>
     <p class="text-h6">Body</p>
     <json-viewer v-if="body"
-      :no-line-numbers="$store.getters['displaySettings/getDisableLineNumbers']"
-      copyable
-      sort
-      boxed
-      :value="body"
+      :preview-mode="true"
+      :value="parsedBody"
     />
   </div>
 </template>
 
-<script>
+<script setup>
 import JsonViewer from 'vue-json-viewer'
+import { defineProps, computed } from 'vue'
 
-export default {
-  name: 'requestBody',
-  props: ['body'],
-  components: { JsonViewer },
-  methods: {
-    parseBody (body) {
-      return body.raw || body[body.mode] || ''
-    }
-  }
-}
+const props = defineProps(['body'])
+
+const parsedBody = computed(() => {
+  return (props.body.raw || props.body[props.body.mode] || '')
+})
 </script>
 
 <style lang="scss" scoped>

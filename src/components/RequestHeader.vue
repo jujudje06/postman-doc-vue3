@@ -10,9 +10,8 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'requestHeader',
-  props: ['header']
-}
+<script setup>
+import { defineProps } from 'vue'
+
+defineProps(['header'])
 </script>

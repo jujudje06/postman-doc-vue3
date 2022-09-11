@@ -10,7 +10,16 @@
           API Doc Generator
         </q-toolbar-title>
 
-        <div>v{{ appVersion }}</div>
+        <div>
+          v{{ appVersion }}
+          <br>
+          <i class="powered">
+            <a href="https://github.com/itsalb3rt/afterman" target="_blank">
+              By Afterman
+            </a>
+          </i>
+        </div>
+        <br/>
       </q-toolbar>
     </q-header>
 
@@ -20,16 +29,14 @@
   </q-layout>
 </template>
 
-<script>
-export default {
-  name: 'MainLayout',
-  mounted () {
-    this.appVersion = process.env.APP_VERSION
-  },
-  data () {
-    return {
-      appVersion: ''
-    }
-  }
-}
+<script setup>
+import { computed } from 'vue'
+const appVersion = computed(() => process.env.APP_VERSION || '')
 </script>
+
+<style scoped>
+.powered {
+  text-decoration: none;
+  font-size: .8rem;
+}
+</style>

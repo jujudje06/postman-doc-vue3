@@ -4,7 +4,9 @@
   "description": "Convert postman collection in Markdown or HTML file",
   "productName": "Quasar App",
   "author": "Albert E. Hidalgo Taveras <itsalb3rt@gmail.com>",
-  "contributors": ["Julien B."],
+  "contributors": [
+    "Julien B."
+  ],
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore ./",
@@ -39,6 +41,7 @@
     "eslint-plugin-quasar": "^1.0.0",
     "eslint-plugin-vue": "^7.0.0",
     "eslint-webpack-plugin": "^3.2.0",
+    "purifycss": "1.2.6", 
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "5.0.0"
   },
