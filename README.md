@@ -8,11 +8,11 @@ Export beautiful docs in **Markdown** and **HTML** from postman collection
 - :tada: Only HTML, CSS and Javascript (**Quasar Framework power**)
 
 ### Frameworks
-- Quasar @2.7.7
-- QuasarApp@ 3.3.3
-- Vue @3
-- Vuex @4
-- Vue-Router @4
+- Quasar v2.7.7
+- QuasarApp v3.3.3
+- Vue v3
+- Vuex v4
+- Vue-Router v4
 
 > Note: The tool covers the basic options of a collection, variables, description, headers, body, routes, as needs arise more things will be added.
 
